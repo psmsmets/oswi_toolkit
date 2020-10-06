@@ -21,10 +21,10 @@ conda install -c conda-forge compilers netcfd4 netcdf-fortran eccodes
 
 ## Install source code
 
-The fortran compiler is limited to GNU gfortran (via conda).
-Make an alias to avoid compiler check issues in the `configure`.
-
 ### Configure
+
+The fortran compiler via conda is limited to GNU gfortran.
+Make an alias to avoid compiler check issues in `configure` (only `gfortran` and not the full name `x86_64-apple-darwin13.4.0-gfortran` is currently allowed).
 
 ```
 alias gfortran=`$CONDA_PREFIX/bin/nc-config --fc`
