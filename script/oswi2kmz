@@ -1,0 +1,166 @@
+#!/bin/bash
+
+if [ $# -lt 3 ]
+  then
+    echo "usage : oswi2kmz variable timespan netcdf_files."
+    echo "   variable     = netcdf variable name, e.g., p_air"
+    echo "   timespan     = variable timespan (in hours), e.g., 12"
+    echo "   netcdf_files = list of netCDF4 files"
+    exit 1;
+fi
+cArgs=("$@")
+
+# set netcdf variable
+var=${cArgs[0]}
+
+# set dt
+timespan2=$(echo "${cArgs[1]}/2" | bc )
+
+# set GMT5
+if [ ${#GMT5} -lt 3 ]; then
+	GMT5="gmt"
+fi
+
+# get variable long name
+longname=$(ncdump -h -v $var ${cArgs[2]} | grep "$var:long_name" | sed -e 's/\(^.*"\)\(.*\)\(".*$\)/\2/')
+
+echo "> Make kmz file for $longname"
+
+# get unit
+units=$(ncdump -h -v $var ${cArgs[2]} | grep "$var:units" | sed -e 's/\(^.*"\)\(.*\)\(".*$\)/\2/')
+
+# get ocean depth: infinite or finite
+dem=$(ncdump -h ${cArgs[2]} | grep 'byte dem_bathymetry_input ;' | wc -l)
+
+# get frequency range
+frqmin=$(ncdump -h ${cArgs[2]} | grep "frequency:min_value = " | sed -e 's/\(^.*=\)\(.*\)\(;.*$\)/\2/')
+frqmax=$(ncdump -h ${cArgs[2]} | grep "frequency:max_value = " | sed -e 's/\(^.*=\)\(.*\)\(;.*$\)/\2/')
+
+# make cpt
+cpt=".oswi2kmz.${RANDOM}.cpt"
+
+if [ "$var" == "d" ]
+  then
+    gmt makecpt -C$GMT_CPT/ncl_default.cpt -T1e-08/1e-05/1e-08 -D > $cpt
+else
+  case $units in
+    Pa)
+      gmt makecpt -C$GMT_CPT/ncl_default.cpt -T0/2/.01 -D > $cpt
+      ;;
+    "dB re 1µPa")
+      gmt makecpt -C$GMT_CPT/ncl_default.cpt -T120/180/.1 -D > $cpt
+      ;;
+    "dB re 20µPa")
+      if [ "$dem" == "1" ]
+        then
+          gmt makecpt -C$GMT_CPT/ncl_default.cpt -T60/95/.1 -D > $cpt
+	else
+          gmt makecpt -C$GMT_CPT/ncl_default.cpt -T45/80/.1 -D > $cpt
+        fi
+      ;;
+    m2)
+      gmt makecpt -C$GMT_CPT/ncl_default.cpt -T0/5/.02 -D > $cpt
+      ;; 
+    m)
+      gmt makecpt -C$GMT_CPT/ncl_default.cpt -T0/10/.04 -D > $cpt
+      ;; 
+    Hz)
+      gmt makecpt -C$GMT_CPT/ncl_default.cpt -T$frqmin/$frqmax/.05 -D > $cpt
+      ;; 
+    *)
+      echo "Weird. Unknown units."
+      exit 1;
+      ;;
+  esac
+fi
+
+# set google earth filenames
+kml="${var}.kml.tmp"
+
+# clean google earth files
+rm -f $kml $kmz
+
+# make kml file
+cat > $kml <<EOF
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Folder>
+    <name>${var}</name>
+    <description>${longname} from ${frqmin//[[:blank:]]/}Hz to ${frqmax//[[:blank:]]/}Hz</description>
+EOF
+
+declare -a kmz_files='()'
+declare -a kmz_dates='()'
+
+# loop over netcdf input files
+for i in $(seq 3 $#);
+do
+    file=${cArgs[$i-1]}
+
+    datetime=$(ncdump -v time $file | grep "time = ")
+    datetime=$(echo $datetime | sed -e 's/\(^.*"\)\(.*\)\(:.*$\)/\2/')
+
+    fdate=$(date -j -f"%Y-%m-%d %H:%M" "$datetime" "+%Y%m%dT%H")
+    begin=$(date -j -v-${timespan2}H -f"%Y-%m-%d %H:%M" "$datetime" "+%Y-%m-%dT%H")
+    end=$(date -j -v+${timespan2}H -f"%Y-%m-%d %H:%M" "$datetime" "+%Y-%m-%dT%H")
+    
+    latmin=$(ncdump -h $file | grep "lat:min_value = " | sed -e 's/\(^.*=\)\(.*\)\(;.*$\)/\2/')
+    latmax=$(ncdump -h $file | grep "lat:max_value = " | sed -e 's/\(^.*=\)\(.*\)\(;.*$\)/\2/')
+
+    name="${var}_${fdate}"
+    ps="${name}.ps"
+    png="${name}.png"
+
+    echo ">> Convert $name"
+
+    # make gmt image
+    $GMT5 grdimage "${file}?${var}" -R0/360/-90/90 -JQ0/15c -C$cpt -Q -Xc -Yc > $ps
+    $GMT5 psconvert $ps -A -E300 -TG -P -Z
+
+    # make kml file
+    cat >> $kml <<EOF
+    <GroundOverlay>
+      <Icon><href>${png}</href></Icon>
+      <name>${var} - ${datetime}</name>
+      <LatLonBox>
+        <west>-180.0</west>
+        <north>${latmax//[[:blank:]]/}</north>
+        <east>180.0</east>
+        <south>${latmin//[[:blank:]]/}</south>
+      </LatLonBox>
+      <TimeSpan>
+        <begin>${begin}</begin>
+        <end>${end}</end>
+      </TimeSpan>
+    </GroundOverlay>
+EOF
+    # add png to kmz list
+    kmz_files+=($png)
+    kmz_dates+=($fdate)
+
+done
+
+
+# finish kml file
+cat >> $kml <<EOF
+  </Folder>
+</kml>
+EOF
+
+# rename kml and kmz to actual name
+km="${var}_${kmz_dates[0]}_${kmz_dates[${#kmz_dates[@]}-1]}"
+
+# rename kml to new name
+mv $kml "${km}.kml"
+
+# store new names
+kmz="${km}.kmz"
+kml="${km}.kml"
+
+echo "> Add all to $kmz"
+
+# make kmz
+zip -r -q $kmz $kml ${kmz_files[*]}
+
+# clean
+rm -f ${kmz_files[*]} $cpt $kml

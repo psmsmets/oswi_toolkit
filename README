@@ -1,0 +1,18 @@
+OSWI is a toolbox for Ocean Surface Wave Interaction calculations.
+
+Documentation can be found here:
+    http://software.pietersmets.be/
+
+
+INSTALLATION
+-------------
+
+1. Download OSWI from http://software.pietersmets.be/
+
+2. Unpack distribution:
+   > tar -xzf oswi_toolkit-x.yz.tar.gz
+
+3. Compile, test and install:
+   > make
+   > make test
+   > make install
