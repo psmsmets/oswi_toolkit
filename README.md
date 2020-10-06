@@ -29,11 +29,10 @@ Make an alias to avoid compiler check issues in `configure` (only `gfortran` and
 ```
 alias gfortran=`$CONDA_PREFIX/bin/nc-config --fc`
 
-FC=gfortran
 FCFLAGS="-O3 -m64 -funroll-all-loops -fpic -I${CONDA_PREFIX}/include"
 FCLIBS="-L${CONDA_PREFIX}/lib -lnetcdf -lnetcdff -leccodes_f90 -leccodes"
 
-FC=$FC FCFLAGS=$FCFLAGS FCLIBS=$FCLIBS ./configure --prefix=$CONDA_PREFIX
+FC=gfortran FCFLAGS=$FCFLAGS FCLIBS=$FCLIBS ./configure --prefix=$CONDA_PREFIX
 ```
 
 ### Compile and install
