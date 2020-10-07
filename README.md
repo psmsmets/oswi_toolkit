@@ -20,7 +20,7 @@ conda activate oswi
 
 Add dependencies
 ```
-conda install -c conda-forge compilers netcfd4 netcdf-fortran eccodes
+conda install -c conda-forge compilers netcdf4 netcdf-fortran eccodes
 ```
 
 ## Install source code
