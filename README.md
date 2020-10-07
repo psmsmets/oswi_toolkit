@@ -100,6 +100,95 @@ echo "export OSWI_DEM_FILES='${CONDA_PREFIX}/share/oswi_toolkit'" >> ${CONDA_PRE
 echo "unset OSWI_DEM_FILES" >> ${CONDA_PREFIX}/etc/conda/deactivate.d/env_vars.sh
 ```
 
+## Documentation
+
+Execute `oswi --help` to display this help text:
+
+```
+oswi 0.2.0 - Ocean Surface Wave Interaction core program
+
+Usage: oswi grib_or_nc_files [OPTIONS]
+
+Options and arguments (except files and paths) are not case sensitive.
+Mandatory arguments to long options are mandatory for short options too.
+General:
+  -?, --help              Display this help text.
+  -q, --quick             Quick and dirty, avoid all checks.
+  -v, --verbose           Verbose information and warnings
+  -n, --filename ..       Set filename. Default is "%V__%C_%T_%R__%G__%Y%M%D_%H".
+                            Filename variables are:
+                             %V = output variable type
+                             %A = output variable standard name
+                             %G = output grid type
+                             %C = 2dfd data class
+                             %T = 2dfd data type
+                             %Y = year
+                             %M = month
+                             %D = day of month
+                             %O = day of year
+                             %H = hour
+                             %S = forecast step
+                             %N = ensemble number
+                             %F = selected frequency
+                             %0 = first frequency
+                             %1 = last frequency
+  -o, --overwrite         Overwrite existing output files, by default not
+                            allowed.
+  -t, --threads [..]      Max number of openmp processing threads. Default = 1.
+Input:
+  -f, --frequency .. ..   Specify the frequency range over which the source
+                            strength spectrum is calculated. Both upper and lower
+                            frequency should be provided. Use -1 to extend the
+                            range automatically to the lower / upper limit.
+                            Note that the input frequency is the ocean wave
+                            frequency for --swh and the acoustic frequency for
+                            other types (thus twice the ocean wave frequency).
+Environment:
+  -id, --infinite-depth   Set infinite ocean. Not for microseisms!
+  -fd, --finite-depth     Set finite ocean depth (default). Bathymetry data is
+                            obtained from a DEM file specified by either the env
+                            variable $OSWI_DEM_FILES or option --dem-file.
+  --dem-file ..           Specify path to a DEM file for bathymetry data,
+                            ignoring environmental variable $OSWI_DEM_FILES.
+  --dem-method ..         Specify downsample method for the given bathymetry
+                            data to match the grid of the 2d wave spectra:
+                            bilinear interp (default) | mean | min | max.
+  --rho-air ..            Set air density (kg m-3).
+  --rho-sea ..            Set sea water density (kg m-3).
+  --rho-bedrock ..        Set bedrock density (kg m-3).
+  --c-air ..              Set speed of sound in air (m s-1).
+  --c-sea ..              Set speed of sound in sea water (m s-1).
+  --c-bedrock ..          Set bedrock shear velocity (m s-1).
+Output type:
+  -a, --air               Air surface pressure variation.
+  -s, --sea               Sea surface pressure variation.
+  -b, --bedrock           Bedrock surface pressure variation.
+  -d, --deformation       Sea floor deformation.
+  -h, --hass              Hasselmann integral.
+  -w, --swh               Significant wave height.
+Output spectrum conversion:
+  -i   , --integrate      Integrate spectrum for the provided frequency range.
+  -i+  , --integrate+     Integrate spectrum and perform additional frequency
+                            analysis: peak, center, and rms frequency and
+                            spectral bandwidth.
+Output unit conversion:
+  -Pa  , --Pa             Set pressure output in Pa. Default unit is log10(Pa).
+  -db  , --dB             Set pressure output in dB.
+  -norm, --normalize      Normalize output.
+  -var , --variance       Square output.
+Output grid conversion:
+  -Gr, --grid-regular     Project data from a reduced_ll to a regular_ll grid
+                            with increment equal to the reduced_ll latitude
+                            increment.
+  -Gi, --grid-icosahedron Project data to from a reduced_ll to an icosahedron
+                            grid with edge size equivalent to
+                            earthRadius * dlat * pi/180.
+Debugging:
+  --export-bathymetry     Export used bathymetry after resampling.
+  --export-modulation     Export modulation coefficients for choosen output.
+  --debug                 Verbose everything.
+```
+
 
 ## Reference
 
