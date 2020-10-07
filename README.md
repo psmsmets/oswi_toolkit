@@ -22,9 +22,11 @@ Conda provides the clang compilers for macOS. But the macOS SDK is still require
 
 The 10.9 SDK can be downloaded from:
 
-https://github.com/phracker/MacOSX-SDKs/releases
+https://github.com/devernay/xcodelegacy
 
-Download [MacOSX10.9.sdk.tar.xz](https://github.com/phracker/MacOSX-SDKs/releases/download/10.15/MacOSX10.9.sdk.tar.xz) and untar it under `/opt/MacOSX10.9.sdk`.
+https://github.com/phracker/MacOSX-SDKs
+
+Download [MacOSX10.9.sdk.tar.xz](https://github.com/phracker/MacOSX-SDKs/releases) and untar it under `/opt/MacOSX10.9.sdk`.
 
 #### Set environment variables
 
