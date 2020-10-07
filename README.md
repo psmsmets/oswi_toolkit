@@ -26,7 +26,12 @@ https://github.com/devernay/xcodelegacy
 
 https://github.com/phracker/MacOSX-SDKs
 
-Download [MacOSX10.9.sdk.tar.xz](https://github.com/phracker/MacOSX-SDKs/releases) and untar it under `/opt/MacOSX10.9.sdk`.
+Download [MacOSX10.9.sdk.tar.xz](https://github.com/phracker/MacOSX-SDKs/releases) and untar it under `/opt/MacOSX10.9.sdk`:
+
+```
+wget https://github.com/phracker/MacOSX-SDKs/releases/download/10.15/MacOSX10.9.sdk.tar.xz
+tar -xf MacOSX10.9.sdk.tar.xz -C /opt
+```
 
 #### Set environment variables
 
