@@ -8,12 +8,6 @@ Sea state is provided as [2D wave spectra](https://apps.ecmwf.int/codes/grib/par
 
 ## Installing pre-requisites using conda
 
-The pre-requisites are different depending on the platform.
-
-
-### Linux
-There is no distribution specific dependencies to install. All requirements will be installed with conda.
-
 Create and activate the oswi environment:
 
 ```
@@ -21,7 +15,7 @@ conda create -y -n oswi make compilers netcdf4 netcdf-fortran eccodes
 conda activate oswi
 ```
 
-### macOS
+### macOS and 10.9 SDK
 
 #### 10.9 SDK
 Conda provides the clang compilers for macOS. But the macOS SDK is still required. The SDK license prevents it from being bundled in the conda package. The SDK has to be installed manually. For compatibility issue, conda packages are built with the 10.9 SDK.
@@ -33,15 +27,7 @@ https://github.com/phracker/MacOSX-SDKs
 
 Download MacOSX10.9.sdk.tar.xz and untar it under `/opt/MacOSX10.9.sdk`.
 
-#### Create environment
-
-Create and activate the oswi environment:
-```
-conda create -y -n oswi make compilers
-conda activate oswi
-```
-
-#### SDK 10.9 environment variables
+#### Set environment variables
 
 Before to be able to compile, three variables have to be set on macOS: `MACOSX_DEPLOYMENT_TARGET`, `CONDA_BUILD_SYSROOT`, and `SDKROOT`.
 
@@ -77,12 +63,9 @@ unset SDKROOT
 unset MACOSX_DEPLOYMENT_TARGET
 ```
 
-#### Install pre-requisites
-
-Install the pre-requisites with the defined environment variables:
+5. Load environment variables:
 ```
 conda activate oswi
-conda install -c conda-forge netcdf4 netcdf-fortran eccodes
 ```
 
 ## Install source code
@@ -116,7 +99,6 @@ Don't forget to add the variable `OSWI_DEM_FILES` to the oswi environment:
 echo "export OSWI_DEM_FILES='${CONDA_PREFIX}/share/oswi_toolkit'" >> ${CONDA_PREFIX}/etc/conda/activate.d/env_vars.sh
 echo "unset OSWI_DEM_FILES" >> ${CONDA_PREFIX}/etc/conda/deactivate.d/env_vars.sh
 ```
-Checkout https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html#macos-and-linux how to add a variable to your environment.
 
 
 ## Reference
