@@ -113,8 +113,8 @@ Make check will give errors due to implementation errors. These can be ignored.
 
 Don't forget to add the variable `OSWI_DEM_FILES` to the oswi environment:
 ```
-echo "export OSWI_DEM_FILES='${CONDA_PREFIX}/share/oswi_toolkit'" >> ./etc/conda/activate.d/env_vars.sh
-echo "unset OSWI_DEM_FILES" >> ./etc/conda/deactivate.d/env_vars.sh
+echo "export OSWI_DEM_FILES='${CONDA_PREFIX}/share/oswi_toolkit'" >> ${CONDA_PREFIX}/etc/conda/activate.d/env_vars.sh
+echo "unset OSWI_DEM_FILES" >> ${CONDA_PREFIX}/etc/conda/deactivate.d/env_vars.sh
 ```
 Checkout https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html#macos-and-linux how to add a variable to your environment.
 
