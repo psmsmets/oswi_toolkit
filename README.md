@@ -100,7 +100,7 @@ echo "export OSWI_DEM_FILES='${CONDA_PREFIX}/share/oswi_toolkit'" >> ${CONDA_PRE
 echo "unset OSWI_DEM_FILES" >> ${CONDA_PREFIX}/etc/conda/deactivate.d/env_vars.sh
 ```
 
-## Documentation
+## Usage
 
 Execute `oswi --help` to display this help text:
 
@@ -189,6 +189,13 @@ Debugging:
   --debug                 Verbose everything.
 ```
 
+Other oswi toolkit programs are:
+- `oswi2ascii` convert oswi netCDF to plain ascii
+- `oswi2bin` convert oswi netCDF to binary
+- `oswi2kmz` convert a sequence of regularly gridded oswi netCDF files to a kmz movie
+- `oswi2seism` convert oswi bedrock netCDF data to microseism forcing and store as binary files
+- `oswi_pssp` generate oswi pseudo spectra for a given location and/or area
+- `oswi_stack` stack oswi netCDF files
 
 ## Reference
 
