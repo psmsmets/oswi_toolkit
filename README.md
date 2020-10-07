@@ -23,6 +23,8 @@ Add dependencies
 conda install -c conda-forge compilers netcdf4 netcdf-fortran eccodes
 ```
 
+*Important* for macOS users: make shure you have [macOS 10.9 SDK](https://docs.conda.io/projects/conda-build/en/latest/resources/compiler-tools.html#macos-sdk) available on your system. Some extra info [here](https://github.com/ContinuumIO/anaconda-issues/issues/9096).
+
 ## Install source code
 
 ### Configure
