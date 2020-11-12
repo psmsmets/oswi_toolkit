@@ -11,7 +11,7 @@ Sea state is provided as [2D wave spectra](https://apps.ecmwf.int/codes/grib/par
 Create and activate the oswi environment:
 
 ```
-conda create -y -n oswi make compilers netcdf4 netcdf-fortran eccodes
+conda create -y -n oswi -c conda-forge make compilers netcdf4 netcdf-fortran eccodes
 conda activate oswi
 ```
 
