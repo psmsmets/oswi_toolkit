@@ -103,7 +103,7 @@ echo "export OSWI_DEM_FILES='${CONDA_PREFIX}/share/oswi_toolkit'" >> ${CONDA_PRE
 echo "unset OSWI_DEM_FILES" >> ${CONDA_PREFIX}/etc/conda/deactivate.d/env_vars.sh
 ```
 
-If for any raison `make` returns the error "'aclocal-1.15' is missing on your system" then run `autoreconf -f -i` before running `./configure ...`. This, however, requires GNU automake, which can be installed by, e.g., Homebrew (`brew install automake`).
+If `make` returns the error "'aclocal-1.15' is missing on your system" then run `autoreconf -f -i` before running `./configure ...`. This, however, requires GNU automake, which can be installed by, e.g., Homebrew (`brew install automake`).
 
 ## Usage
 
