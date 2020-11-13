@@ -1,0 +1,21 @@
+# Distribution / packaging
+autom4te.cache
+Makefile
+config.log
+config.status
+libtool
+*.o
+*.mod
+
+# Binaries
+src/oswi
+src/oswi2ascii
+src/oswi2bin
+src/oswi2seism
+src/oswi_pssp
+src/oswi_stack
+
+# User related
+*.key
+*.swp
+*.DS_Store
