@@ -1,0 +1,15 @@
+name: oswi
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - make
+  - compilers
+  - netcdf4
+  - netcdf-fortran
+  - eccodes
+variables:
+  CONDA_BUILD_SYSROOT: '/opt/MacOSX10.9.sdk'
+  SDKROOT: '/opt/MacOSX10.9.sdk'
+  MACOSX_DEPLOYMENT_TARGET: '10.9'
+  OSWI_DEM_FILES: '${CONDA_PREFIX}/share/oswi_toolkit'
